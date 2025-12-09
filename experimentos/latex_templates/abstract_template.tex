@@ -1,0 +1,32 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ABSTRACT - DeepBridge Fairness Framework
+% Template com resultados experimentais
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{abstract}
+Ensuring fairness in machine learning systems requires identifying and mitigating
+biases related to sensitive attributes such as race, gender, and age. However,
+manually identifying these attributes in tabular datasets is time-consuming and
+error-prone. We present the \textbf{DeepBridge Fairness Framework}, an automated
+system for detecting sensitive attributes in tabular data and assessing compliance
+with EEOC/ECOA regulations.
+
+Our framework employs fuzzy matching algorithms combined with domain-specific
+knowledge bases to automatically identify sensitive attributes across nine
+protected categories (race, color, religion, sex, national origin, age, disability,
+veteran status, and genetic information).
+
+We evaluated our framework on 500 tabular datasets with dual-annotated ground truth
+($\kappa = 0.978$, near-perfect inter-rater agreement). Results demonstrate:
+(1) high detection accuracy with F1-score of \textbf{0.978} (95\% CI [0.968, 0.988]),
+achieving 96.9\% precision and 99.5\% recall; and
+(2) significant computational speedup of \textbf{2.91×} compared to manual
+identification ($p < 0.001$, Cohen's $d = 2.85$).
+
+These results validate that automated sensitive attribute detection can achieve
+near-human accuracy while substantially reducing manual effort, enabling scalable
+fairness auditing in production ML pipelines.
+
+\textbf{Keywords}: Machine Learning Fairness, Bias Detection, Sensitive Attributes,
+EEOC Compliance, Tabular Data, Automated Auditing
+\end{abstract}

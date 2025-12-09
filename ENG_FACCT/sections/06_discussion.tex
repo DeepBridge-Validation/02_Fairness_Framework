@@ -1,0 +1,119 @@
+\section{Discussion}
+\label{sec:discussion}
+
+This section discusses approach limitations and ethical considerations. For metric selection guidance and production best practices, see Appendix B and C.
+
+\subsection{Limitations}
+
+\subsubsection{Causal Fairness Not Covered}
+
+DeepBridge Fairness focuses on group fairness metrics (statistical). \textbf{Does not cover}:
+\begin{itemize}
+    \item \textbf{Counterfactual fairness}~\cite{kusner2017counterfactual}: Requires complete causal model (rarely available)
+    \item \textbf{Path-specific effects}: Separating direct vs. indirect effects of protected attributes
+\end{itemize}
+
+\textbf{Implication}: DeepBridge detects correlations, not causality. Example:
+\begin{itemize}
+    \item Model can be ``fair'' according to equalized odds, but still discriminate via proxies (e.g., zip code as race proxy)
+    \item Manual causal analysis still needed for complete interpretation
+\end{itemize}
+
+\textbf{Future Direction}: Integrate causal inference tools (e.g., DoWhy) in future versions.
+
+\subsubsection{Intersectionality Challenges}
+
+DeepBridge analyzes protected attributes \textit{separately}. \textbf{Limitation}:
+\begin{itemize}
+    \item Does not detect bias at intersections (e.g., Black women vs. white women vs. Black men)
+    \item Known phenomenon: ``intersectional invisibility''~\cite{buolamwini2018gender}
+\end{itemize}
+
+\textbf{Example}:
+\begin{lstlisting}[language=Python]
+# Current analysis: race and gender separately
+ftm.run_tests(protected_attributes=['race', 'gender'])
+
+# Does not detect: bias specific to Black+Female
+# Partial solution: create combined feature
+df['race_gender'] = df['race'] + '_' + df['gender']
+ftm.run_tests(protected_attributes=['race_gender'])
+\end{lstlisting}
+
+\textbf{Problem}: Combinatorial explosion (7 attributes × 3 values = 2187 combinations).
+
+\textbf{Future Direction}: Implement slice-based analysis~\cite{eyuboglu2022domino} to automatically detect problematic subgroups.
+
+\subsubsection{Threshold Optimization Assumptions}
+
+Threshold optimization assumes:
+\begin{enumerate}
+    \item \textbf{Fixed model}: Adjust threshold, not retrain model
+    \item \textbf{Acceptable trade-off}: Not always -- in healthcare, reducing FNR for group A should not increase FNR for group B
+    \item \textbf{Stable distribution}: Optimal threshold may change with data drift
+\end{enumerate}
+
+\textbf{When Threshold Adjustment is NOT Sufficient}:
+\begin{itemize}
+    \item Adult Income case: DI max = 0.65 even with extreme threshold (0.1)
+    \item Solution: Retrain with fairness constraints (e.g., adversarial debiasing, reweighting)
+\end{itemize}
+
+DeepBridge \textbf{alerts} when threshold adjustment is insufficient, but \textbf{does not implement} automatic mitigations (future direction).
+
+\subsection{Ethical Considerations}
+
+\subsubsection{Risk of ``Fairness Washing''}
+
+Fairness tools can be used to ``wash'' discriminatory decisions:
+\begin{itemize}
+    \item Organization uses DeepBridge, obtains ``EEOC compliant'' report
+    \item But: Selected favorable metric, ignored other violations
+    \item Uses report to justify problematic system
+\end{itemize}
+
+\textbf{Mitigations}:
+\begin{enumerate}
+    \item \textbf{Report always includes ALL 15 metrics} (does not allow cherry-picking)
+    \item \textbf{Explicit warnings} when trade-offs exist
+    \item \textbf{Human auditor recommendation} in ambiguous cases
+\end{enumerate}
+
+\subsubsection{Metric Selection Bias}
+
+Choosing the ``correct'' metric is a political/ethical decision, not technical:
+\begin{itemize}
+    \item \textbf{Demographic parity}: Prioritizes proportional representation
+    \item \textbf{Equalized odds}: Prioritizes equal error rates
+    \item \textbf{Equal opportunity}: Prioritizes equal chances for qualified individuals
+\end{itemize}
+
+Each metric favors different groups in different contexts~\cite{chouldechova2017fair}.
+
+\textbf{DeepBridge Position}:
+\begin{itemize}
+    \item \textbf{We do not prescribe} which metric to use
+    \item \textbf{We report all} and explain trade-offs
+    \item \textbf{We recommend} involving stakeholders (legal, ethics, impacted) in decision
+\end{itemize}
+
+\subsubsection{Bias in, Bias out}
+
+Fairness metrics detect bias in \textit{predictions}, not in \textit{labels}:
+\begin{itemize}
+    \item If training labels are biased (e.g., historical discriminatory decisions), model learns and reproduces bias
+    \item DeepBridge may report ``fair'' but system perpetuates historical discrimination
+\end{itemize}
+
+\textbf{Example -- COMPAS}:
+\begin{itemize}
+    \item Labels (``recidivated'') depend on policing (more surveillance in Black neighborhoods → more arrests → more positive labels)
+    \item ``Fair'' model according to equalized odds still reflects discriminatory policing
+\end{itemize}
+
+\textbf{Recommendation}:
+\begin{enumerate}
+    \item Always analyze \textbf{pre-training metrics} (class balance, KL divergence)
+    \item Investigate \textbf{labeling process} to detect upstream bias
+    \item Consider \textbf{data debiasing} before training model
+\end{enumerate}

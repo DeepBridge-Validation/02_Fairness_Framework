@@ -1,0 +1,105 @@
+{
+  "experiment": "Exp1_AutoDetection",
+  "n_datasets": 500,
+  "precision": 0.9754333333333333,
+  "recall": 0.9756666666666667,
+  "f1_mean": 0.9718412698412698,
+  "f1_std": 0.10908606374919133,
+  "f1_ci_95": [
+    0.9622563825412499,
+    0.9814261571412898
+  ],
+  "claim_validated": true,
+  "results": [
+    {
+      "dataset": "synthetic_0000.csv",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "dataset": "synthetic_0001.csv",
+      "precision": 1.0,
+      "recall": 0.6666666666666666,
+      "f1": 0.8,
+      "tp": 2,
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "dataset": "synthetic_0002.csv",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "dataset": "synthetic_0003.csv",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "dataset": "synthetic_0004.csv",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "dataset": "synthetic_0005.csv",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "dataset": "synthetic_0006.csv",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "dataset": "synthetic_0007.csv",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "dataset": "synthetic_0008.csv",
+      "precision": 1.0,
+      "recall": 0.5,
+      "f1": 0.6666666666666666,
+      "tp": 1,
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "dataset": "synthetic_0009.csv",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    }
+  ]
+}

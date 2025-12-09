@@ -1,0 +1,24 @@
+{
+  "timestamp": "$(date -Iseconds)",
+  "experiments_run": [
+    "Exp1_AutoDetection",
+    "Exp5_Performance"
+  ],
+  "exp1": {
+    "f1_score": 0.9718412698412698,
+    "f1_ci_95": [
+      0.9622563825412499,
+      0.9814261571412898
+    ],
+    "validated": true
+  },
+  "exp5": {
+    "speedup": 3.038734732249298,
+    "validated": true
+  },
+  "overall": {
+    "experiments_validated": 2,
+    "experiments_total": 2,
+    "validation_rate": 1.0
+  }
+}

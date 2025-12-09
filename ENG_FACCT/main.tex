@@ -1,0 +1,140 @@
+\documentclass[manuscript, review, anonymous]{acmart}
+
+%% ============================================
+%% REMOVER INFO DE COPYRIGHT (apenas submissão)
+%% ============================================
+\setcopyright{none}
+\settopmatter{printacmref=false}
+\renewcommand\footnotetextcopyrightpermission[1]{}
+
+% Remover info da conferência (submissão)
+\acmConference{}{}{}
+\acmBooktitle{}
+
+%% ============================================
+%% PACOTES ADICIONAIS (verificar whitelist ACM)
+%% ============================================
+\usepackage{booktabs}       % Tabelas profissionais
+\usepackage{algorithm}      % Algoritmos
+\usepackage{algorithmic}    % Pseudocódigo
+\usepackage{listings}       % Code listings
+\usepackage{graphicx}       % Figuras
+\usepackage{multirow}
+\usepackage{enumerate}
+\usepackage{subfig}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,calc}
+\usepackage{xcolor}
+\usepackage{pifont}
+\usepackage{amsmath}
+
+% Define checkmark and xmark
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{55}}
+
+% Code listing style
+\lstset{
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    language=Python,
+    showstringspaces=false,
+    commentstyle=\color{gray},
+    keywordstyle=\color{blue},
+    stringstyle=\color{red},
+    inputencoding=utf8,
+    extendedchars=true,
+    literate=
+        {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+        {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+        {à}{{\`a}}1 {è}{{\`e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1
+        {À}{{\`A}}1 {È}{{\'E}}1 {Ì}{{\`I}}1 {Ò}{{\`O}}1 {Ù}{{\`U}}1
+        {ä}{{\"a}}1 {ë}{{\"e}}1 {ï}{{\"i}}1 {ö}{{\"o}}1 {ü}{{\"u}}1
+        {Ä}{{\"A}}1 {Ë}{{\"E}}1 {Ï}{{\"I}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1
+        {â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1
+        {Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1
+        {ã}{{\~a}}1 {õ}{{\~o}}1 {Ã}{{\~A}}1 {Õ}{{\~O}}1
+        {ç}{{\c c}}1 {Ç}{{\c C}}1 {ø}{{\o}}1 {å}{{\r a}}1 {Å}{{\r A}}1
+        {€}{{\euro}}1 {£}{{\pounds}}1 {ñ}{{\~n}}1
+}
+
+\AtBeginDocument{%
+  \providecommand\BibTeX{{%
+    \normalfont B\kern-0.5em{\scshape i\kern-0.25em b}\kern-0.8em\TeX}}}
+
+%% ============================================
+%% INÍCIO DO DOCUMENTO
+%% ============================================
+\begin{document}
+
+%% Título
+\title{DeepBridge Fairness: From Research to Regulation -- A Production-Ready Framework for Algorithmic Fairness Testing}
+
+%% Abstract (OBRIGATÓRIO antes de \maketitle)
+\begin{abstract}
+Machine Learning (ML) systems in regulated domains (credit, hiring, healthcare) require rigorous fairness verification for compliance with EEOC, ECOA, and GDPR. Existing tools present critical gaps: \textbf{(1) Academic vs. regulatory focus} -- research metrics do not map directly to legal requirements (EEOC 80\% rule, ECOA adverse actions); \textbf{(2) Manual attribute identification} -- data scientists must manually specify sensitive attributes in each analysis; \textbf{(3) Metric fragmentation} -- tools cover distinct subsets (AI Fairness 360: 8 metrics, Fairlearn: 6, Aequitas: 7) without complete coverage; \textbf{(4) Absence of threshold optimization} -- they do not guide deployment decisions on fairness-accuracy trade-offs.
+
+We present \textbf{DeepBridge Fairness}, the first framework that integrates fairness metrics with automatic regulatory compliance verification for production. DeepBridge Fairness offers: \textbf{(i) 15 integrated metrics} covering pre-training (4) and post-training (11), \textbf{(ii) automatic sensitive attribute detection} via fuzzy matching (gender, race, age, religion, disability, nationality), \textbf{(iii) automated EEOC/ECOA verification} (80\% rule, 2\% minimum representation, adverse action notices), \textbf{(iv) threshold optimization} analyzing fairness-accuracy trade-offs in 10-90\% range, and \textbf{(v) comprehensive visualizations} with 6 chart types and audit-ready reports.
+
+Through 4 case studies (COMPAS, German Credit, Adult Income, Healthcare) we demonstrate that DeepBridge Fairness: \textbf{automatically detects violations} with 100\% precision (10/10 sensitive attributes vs. 2/10 from manual tools), \textbf{covers 87\% more metrics} than existing tools (15 vs. 8 metrics), \textbf{reduces analysis time by 73\%} (8 min vs. 30 min), and \textbf{identifies optimal thresholds} balancing fairness and accuracy. Usability study with 20 practitioners shows SUS score 85.2 (top 15\%, ``excellent''), 95\% success rate, and average time of 10 minutes for first analysis.
+
+DeepBridge Fairness is in production at financial and healthcare organizations, is open-source under MIT license at [Anonymous repository - link provided upon acceptance].
+\end{abstract}
+
+%% ============================================
+%% CCS CONCEPTS (OBRIGATÓRIO)
+%% Gerado em: https://dl.acm.org/ccs/ccs.cfm
+%% ============================================
+\begin{CCSXML}
+<ccs2012>
+<concept>
+<concept_id>10010147.10010257</concept_id>
+<concept_desc>Computing methodologies~Machine learning</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+<concept>
+<concept_id>10003120.10003130</concept_id>
+<concept_desc>Human-centered computing~Collaborative and social computing</concept_desc>
+<concept_significance>300</concept_significance>
+</concept>
+<concept>
+<concept_id>10002950.10003624.10003633</concept_id>
+<concept_desc>Mathematics of computing~Statistical paradigms</concept_desc>
+<concept_significance>300</concept_significance>
+</concept>
+</ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Computing methodologies~Machine learning}
+\ccsdesc[300]{Human-centered computing~Collaborative and social computing}
+\ccsdesc[300]{Mathematics of computing~Statistical paradigms}
+
+%% Keywords
+\keywords{Algorithmic Fairness, Responsible AI, Regulatory Compliance, EEOC, ECOA, Bias Detection, ML Production, MLOps, Automated Testing}
+
+%% Gerar título e metadados
+\maketitle
+
+%% ============================================
+%% CONTEÚDO DO PAPER
+%% ============================================
+\input{sections/01_introduction}
+\input{sections/02_related_work}
+\input{sections/03_architecture}
+\input{sections/04_case_studies}
+\input{sections/05_evaluation}
+\input{sections/06_discussion}
+\input{sections/07_conclusion}
+
+%% ============================================
+%% APPENDIX
+%% ============================================
+\input{sections/appendix}
+
+%% ============================================
+%% REFERÊNCIAS
+%% ============================================
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{bibliography/references}
+
+\end{document}

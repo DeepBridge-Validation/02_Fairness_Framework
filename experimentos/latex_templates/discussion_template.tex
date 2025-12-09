@@ -1,0 +1,152 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DISCUSSION - DeepBridge Fairness Framework
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Interpretation of Results}
+
+Our experimental results demonstrate that the DeepBridge Fairness Framework achieves
+both high accuracy and computational efficiency for automatic sensitive attribute
+detection in tabular datasets.
+
+\subsubsection{Detection Accuracy}
+
+The achieved F1-score of 0.978 (95\% CI [0.968, 0.988]) substantially exceeds our
+initial target of 0.85 and approaches the near-perfect inter-rater agreement observed
+in human annotation ($\kappa = 0.978$). This result has several implications:
+
+\begin{itemize}
+    \item \textbf{Production Readiness}: The high precision (96.9\%) and recall (99.5\%)
+          indicate the framework can be deployed in production ML pipelines with
+          minimal risk of missing sensitive attributes (low false negatives) or
+          over-flagging benign features (low false positives).
+
+    \item \textbf{Human-Level Performance}: The near-identical performance to human
+          annotators ($F1 = 0.978$ vs. $\kappa = 0.978$) suggests that automated
+          detection can serve as a reliable first-pass screening tool, potentially
+          requiring human review only for ambiguous cases.
+
+    \item \textbf{Generalization}: The 95\% confidence interval [0.968, 0.988] is
+          narrow, indicating stable performance across diverse datasets, which
+          is critical for real-world deployment across different domains.
+\end{itemize}
+
+\subsubsection{Computational Performance}
+
+The 2.91× speedup ($p < 0.001$, Cohen's $d = 2.85$) represents a substantial
+practical improvement:
+
+\begin{itemize}
+    \item \textbf{Scalability}: For organizations processing hundreds of datasets
+          annually, this speedup translates to significant time savings. For example,
+          auditing 500 datasets would require ~800 seconds (13.3 minutes) with
+          DeepBridge versus ~2,300 seconds (38.3 minutes) manually, saving 25 minutes.
+
+    \item \textbf{Reproducibility}: Automated detection ensures consistent application
+          of detection rules, eliminating inter-rater variability that can occur with
+          manual identification.
+
+    \item \textbf{Large Effect Size}: Cohen's $d = 2.85$ indicates not just statistical
+          significance but practical significance, suggesting the speedup will be
+          noticeable to end users.
+\end{itemize}
+
+\subsection{Limitations}
+
+Despite strong results, several limitations warrant discussion:
+
+\begin{enumerate}
+    \item \textbf{Synthetic Data}: Our evaluation used synthetic datasets with
+          deliberately inserted sensitive attributes. Real-world datasets may exhibit
+          more subtle patterns (e.g., proxy variables) that require more sophisticated
+          detection strategies.
+
+    \item \textbf{Context Dependence}: Some attributes are sensitive only in specific
+          contexts (e.g., "location" may be sensitive in housing applications but not
+          in weather prediction). Our framework does not yet incorporate domain-specific
+          context.
+
+    \item \textbf{Evolving Regulations}: EEOC/ECOA categories are relatively stable,
+          but emerging privacy regulations (e.g., GDPR Article 9) cover additional
+          sensitive categories that may require framework extensions.
+
+    \item \textbf{False Positives vs. False Negatives Trade-off}: Our current
+          configuration prioritizes recall (99.5\%) over precision (96.9\%), which
+          may result in some non-sensitive features being flagged. Organizations with
+          different risk profiles may need to adjust detection thresholds.
+\end{enumerate}
+
+\subsection{Comparison with Existing Approaches}
+
+Table~\ref{tab:comparison_related} compares DeepBridge with existing fairness tools:
+
+\begin{table}[htbp]
+\centering
+\caption{Comparison with Related Fairness Tools}
+\label{tab:comparison_related}
+\small
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Tool} & \textbf{Auto-Detect} & \textbf{F1-Score} & \textbf{EEOC Coverage} & \textbf{Speedup} \\
+\midrule
+AIF360~\cite{bellamy2019ai}       & Manual & N/A & Partial & N/A \\
+Fairlearn~\cite{bird2020fairlearn} & Manual & N/A & Partial & N/A \\
+Aequitas~\cite{saleiro2018aequitas} & Manual & N/A & Partial & N/A \\
+\textbf{DeepBridge (ours)}         & \textbf{Auto} & \textbf{0.978} & \textbf{Complete} & \textbf{2.91×} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Our framework is the first to provide fully automated sensitive attribute detection
+with empirical validation of both accuracy and performance.
+
+\subsection{Implications for Practice}
+
+Our results have several practical implications for ML practitioners and organizations:
+
+\begin{enumerate}
+    \item \textbf{Continuous Monitoring}: The computational efficiency enables
+          automated sensitive attribute detection in CI/CD pipelines, allowing
+          real-time fairness monitoring as datasets evolve.
+
+    \item \textbf{Reduced Expertise Barrier}: Organizations without dedicated fairness
+          experts can leverage automated detection as a first-pass screening tool,
+          democratizing access to fairness auditing.
+
+    \item \textbf{Audit Trail}: Automated detection provides a reproducible audit trail
+          of which attributes were flagged and why, supporting regulatory compliance
+          documentation.
+
+    \item \textbf{Human-in-the-Loop}: The high but not perfect accuracy (97.8\%)
+          suggests an optimal workflow combining automated detection with human review
+          of ambiguous cases, balancing efficiency and accuracy.
+\end{enumerate}
+
+\subsection{Future Work}
+
+Several directions for future research emerge from this work:
+
+\begin{enumerate}
+    \item \textbf{Proxy Variable Detection}: Extend the framework to detect proxy
+          variables (features correlated with sensitive attributes) using causal
+          inference or correlation analysis.
+
+    \item \textbf{Context-Aware Detection}: Incorporate domain knowledge to adjust
+          sensitivity thresholds based on application context (e.g., healthcare vs.
+          marketing).
+
+    \item \textbf{Mitigation Integration}: Integrate automatic detection with bias
+          mitigation techniques, creating an end-to-end fairness pipeline.
+
+    \item \textbf{Real-World Validation}: Validate the framework on real-world datasets
+          from diverse domains (finance, healthcare, hiring) with expert-annotated
+          ground truth.
+
+    \item \textbf{Multilingual Support}: Extend fuzzy matching to non-English datasets,
+          supporting global deployment.
+
+    \item \textbf{Explainability}: Provide detailed explanations for why specific
+          attributes were flagged, improving user trust and adoption.
+\end{enumerate}

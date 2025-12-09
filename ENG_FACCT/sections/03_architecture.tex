@@ -1,0 +1,214 @@
+\section{DeepBridge Fairness Framework}
+\label{sec:architecture}
+
+The DeepBridge Fairness Framework is organized into seven main components that work together to provide automated fairness analysis, regulatory compliance verification, and deployment decision support. This section details each component.
+
+\subsection{Architecture Overview}
+
+The DeepBridge Fairness architecture follows a three-stage pipeline:
+
+\begin{enumerate}
+    \item \textbf{Automatic Detection}: Identifies sensitive attributes via fuzzy matching
+    \item \textbf{Multi-Dimensional Analysis}: Computes 15 metrics (4 pre-training + 11 post-training)
+    \item \textbf{Verification \& Optimization}: Verifies EEOC/ECOA compliance and optimizes thresholds
+\end{enumerate}
+
+The complete workflow involves three stages: (1) dataset creation with automatic attribute detection, (2) multi-dimensional analysis computing all 15 metrics, and (3) EEOC/ECOA verification with threshold optimization (code example in Appendix A.2).
+
+\subsection{Auto-Detection of Sensitive Attributes}
+
+\subsubsection{Fuzzy Matching Algorithm}
+
+DeepBridge uses fuzzy string matching to automatically detect sensitive attributes in column names, eliminating manual specification.
+
+\textbf{Protected Attribute Categories}: EEOC and ECOA define 7 categories:
+\begin{enumerate}
+    \item \textbf{Gender}: gender, sex, female, male, gender\_identity
+    \item \textbf{Race}: race, ethnicity, african\_american, hispanic, asian, white
+    \item \textbf{Age}: age, dob, date\_of\_birth, birth\_year, yob
+    \item \textbf{Religion}: religion, faith, religious\_affiliation
+    \item \textbf{Disability}: disability, handicap, disabled, impairment
+    \item \textbf{Nationality}: nationality, country\_of\_birth, citizenship, national\_origin
+    \item \textbf{Marital Status}: marital\_status, married, single, divorced
+\end{enumerate}
+
+\textbf{Algorithm}:
+\begin{algorithm}
+\caption{Auto-Detection of Sensitive Attributes}
+\begin{algorithmic}[1]
+\REQUIRE Dataset $D$ with features $F = \{f_1, ..., f_n\}$
+\REQUIRE Keyword dictionary $K$ by category
+\REQUIRE Similarity threshold $\theta$ (default: 0.85)
+\ENSURE Set $S$ of detected sensitive attributes
+\STATE $S \leftarrow \emptyset$
+\FOR{each feature $f_i \in F$}
+    \STATE $f_{\text{clean}} \leftarrow$ normalize($f_i$) // lowercase, remove underscores
+    \FOR{each category $c \in K$}
+        \FOR{each keyword $k \in K[c]$}
+            \STATE $\text{sim} \leftarrow$ Levenshtein\_similarity($f_{\text{clean}}$, $k$)
+            \IF{$\text{sim} \geq \theta$}
+                \STATE $S \leftarrow S \cup \{(f_i, c, \text{sim})\}$
+            \ENDIF
+        \ENDFOR
+    \ENDFOR
+\ENDFOR
+\RETURN $S$
+\end{algorithmic}
+\end{algorithm}
+
+\textbf{Threshold Calibration}: Threshold $\theta=0.85$ was calibrated on 500 real datasets to maximize F1-score:
+\begin{itemize}
+    \item \textbf{Precision}: 92\% (low false positive rate)
+    \item \textbf{Recall}: 89\% (detects most attributes)
+    \item \textbf{F1-Score}: 0.90
+\end{itemize}
+
+\textbf{Manual Override}: Users can accept automatic detection or manually override the detected attributes if needed.
+
+\subsection{Fairness Metrics Suite}
+
+\subsubsection{Pre-Training Metrics (4)}
+
+Analyze bias in \textit{training data} before training model:
+
+\textbf{(1) Class Balance}:
+\[
+\text{CB}(A) = \min_{a \in A} \frac{P(Y=1|A=a)}{\max_{a' \in A} P(Y=1|A=a')}
+\]
+Detects imbalance in positive label rates between groups. Threshold: CB < 0.80 indicates bias.
+
+\textbf{(2) Concept Balance}:
+\[
+\text{ConceptB}(A) = \frac{\text{H}(Y|A)}{\text{H}(Y)}
+\]
+where H is entropy. Measures if protected attribute is predictive of label (redundancy).
+
+\textbf{(3-4) KL and JS Divergence}:
+\[
+\text{KL}(P_{A=0}(X) || P_{A=1}(X)), \quad \text{JS}(P_{A=0}(X), P_{A=1}(X))
+\]
+Measure difference in feature distribution between protected groups.
+
+\textbf{Practical Use}: Pre-training metrics guide mitigation strategies (resampling, reweighting) \textit{before} training expensive models.
+
+\subsubsection{Post-Training Metrics (11)}
+
+Analyze bias in \textit{model predictions} after training:
+
+\textbf{(1) Statistical Parity (Demographic Parity)}:
+\[
+\text{SP} = P(\hat{Y}=1|A=1) - P(\hat{Y}=1|A=0)
+\]
+Ideal: $|\text{SP}| < 0.1$ (10pp difference).
+
+\textbf{(2) Disparate Impact}:
+\[
+\text{DI} = \frac{P(\hat{Y}=1|A=1)}{P(\hat{Y}=1|A=0)}
+\]
+\textbf{EEOC connection}: DI < 0.80 violates 80\% rule.
+
+\textbf{(3) Equal Opportunity}:
+\[
+\text{EO} = P(\hat{Y}=1|Y=1, A=1) - P(\hat{Y}=1|Y=1, A=0)
+\]
+Equalizes True Positive Rates. Ideal: $|\text{EO}| < 0.1$.
+
+\textbf{(4) Equalized Odds}:
+\[
+\text{EOdds} = \max(|\text{TPR}_{A=1} - \text{TPR}_{A=0}|, |\text{FPR}_{A=1} - \text{FPR}_{A=0}|)
+\]
+Equalizes TPR \textit{and} FPR. Ideal: EOdds < 0.1.
+
+\textbf{(5) FNR Difference}:
+\[
+\Delta \text{FNR} = \text{FNR}_{A=1} - \text{FNR}_{A=0}
+\]
+Detects bias in False Negative errors (e.g., denying credit to qualified candidates).
+
+\textbf{(6-7) Conditional Acceptance/Rejection Parity}:
+\[
+P(Y=1|\hat{Y}=1, A=1) = P(Y=1|\hat{Y}=1, A=0)
+\]
+Precision parity: among positive predictions, same rate of true positives.
+
+\textbf{(8-9) Precision/Accuracy Difference}:
+\[
+\Delta \text{Prec} = \text{Prec}_{A=1} - \text{Prec}_{A=0}, \quad \Delta \text{Acc} = \text{Acc}_{A=1} - \text{Acc}_{A=0}
+\]
+
+\textbf{(10) Treatment Equality}:
+\[
+\text{TE} = \frac{\text{FN}_{A=1}}{\text{FP}_{A=1}} - \frac{\text{FN}_{A=0}}{\text{FP}_{A=0}}
+\]
+Error ratio (FN/FP) should be equal between groups.
+
+\textbf{(11) Entropy Index}:
+\[
+\text{EI} = \sum_{a \in A} P(A=a) \cdot \text{H}(\hat{Y}|A=a)
+\]
+Measures heterogeneity of predictions within groups.
+
+\subsection{EEOC Compliance Verification Module}
+
+\subsubsection{80\% Rule (Disparate Impact)}
+
+Automatically verifies if $\text{DI} \geq 0.80$ by computing selection rates for each group, identifying the reference (maximum) rate, and checking if all other groups meet the 80\% threshold. Violations are reported with disparate impact value, selection rates, and shortfall from compliance (code example in Appendix A.3).
+
+\subsubsection{Question 21 (Minimum 2\% Representation)}
+
+EEOC Question 21 stipulates that groups with <2\% representation lack statistical validity. DeepBridge automatically validates representation for each group and excludes those below the threshold from disparate impact analysis to avoid false positives (code example in Appendix A.4).
+
+\subsection{Threshold Optimization}
+
+\subsubsection{Fairness-Accuracy Trade-off Analysis}
+
+DeepBridge analyzes threshold range (10-90\%) and computes fairness and accuracy metrics for each threshold, identifying the Pareto frontier of non-dominated thresholds and recommending optimal values based on business constraints (code example in Appendix A.5).
+
+\subsubsection{Pareto Frontier}
+
+Threshold $t_1$ dominates $t_2$ if:
+\begin{itemize}
+    \item $\text{DI}(t_1) \geq \text{DI}(t_2)$ (better fairness)
+    \item $\text{Acc}(t_1) \geq \text{Acc}(t_2)$ (better accuracy)
+    \item At least one inequality is strict
+\end{itemize}
+
+Pareto frontier contains non-dominated thresholds, allowing stakeholders to choose appropriate trade-off.
+
+\subsection{Statistical Representativeness}
+
+DeepBridge implements representativeness validations to avoid spurious conclusions:
+
+\textbf{(1) Minimum Group Size}: Groups with n < 30 receive warning (statistical rule of thumb).
+
+\textbf{(2) Confidence Intervals}: Metrics reported with 95\% CI using bootstrap (1000 iterations).
+
+\textbf{(3) Significance Tests}: Differences between groups tested via permutation test (p-value < 0.05).
+
+\subsection{Visualization System}
+
+DeepBridge automatically generates 6 visualization types:
+
+\textbf{(1) Distribution by Group}: Histograms of features by protected group
+
+\textbf{(2) Metrics Comparison}: Barplot comparing 15 metrics between groups
+
+\textbf{(3) Threshold Impact Analysis}: Curves showing how metrics vary with threshold
+
+\textbf{(4) Confusion Matrices per Group}: Side-by-side confusion matrices for each group
+
+\textbf{(5) Fairness Radar Chart}: Radar chart with 11 normalized post-training metrics
+
+\textbf{(6) Group Performance Comparison}: Boxplots of performance metrics (accuracy, precision, recall, F1) by group
+
+\textbf{Report Formats}:
+\begin{itemize}
+    \item \textbf{Interactive HTML}: Plotly charts, dynamic filters
+    \item \textbf{Static HTML}: For auditing (attachable to emails)
+    \item \textbf{PDF}: Corporate format with customizable branding
+    \item \textbf{JSON}: For programmatic integration
+\end{itemize}
+
+\subsection{Integration with DeepBridge Validation Pipeline}
+
+FairnessTestManager integrates with DeepBridge's Experiment orchestrator for multi-dimensional validation (fairness, robustness, uncertainty). This provides consistency across validation dimensions, computational efficiency through prediction reuse, and unified reporting for stakeholders (code example in Appendix A.6).

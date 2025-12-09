@@ -1,0 +1,41 @@
+{
+  "experiment": "Exp5_Performance",
+  "n_sizes": 3,
+  "avg_speedup": 3.038734732249298,
+  "claim_validated": true,
+  "results": [
+    {
+      "dataset_size": 1000,
+      "deepbridge_time": 0.5104607161491693,
+      "manual_time": 1.502188627893928,
+      "aif360_time": 0.7632491799269909,
+      "fairlearn_time": 0.7505801433485522,
+      "speedup": 2.942809466762083,
+      "t_statistic": 18.03302300483564,
+      "p_value": 2.2580927757857248e-08,
+      "cohens_d": 5.70254257934942
+    },
+    {
+      "dataset_size": 10000,
+      "deepbridge_time": 0.9860517108487494,
+      "manual_time": 3.0001587151535394,
+      "aif360_time": 1.6137387809831822,
+      "fairlearn_time": 1.5849199450972362,
+      "speedup": 3.042597748318023,
+      "t_statistic": 22.763167895320187,
+      "p_value": 2.8918702251490376e-09,
+      "cohens_d": 7.19834573100331
+    },
+    {
+      "dataset_size": 100000,
+      "deepbridge_time": 1.973497881973526,
+      "manual_time": 6.178621212210488,
+      "aif360_time": 3.1252152692950617,
+      "fairlearn_time": 3.173804787262289,
+      "speedup": 3.130796981667788,
+      "t_statistic": 20.98856840188038,
+      "p_value": 5.9304594314586755e-09,
+      "cohens_d": 6.6371680976182255
+    }
+  ]
+}
