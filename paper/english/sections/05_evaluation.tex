@@ -184,10 +184,11 @@ Claim 1 (F1 $\geq$ 0.85) & \multicolumn{3}{c}{\cmark~\textbf{VALIDATED} (0.978 >
     \item \textbf{Statistical Validation}: 95\% confidence interval [0.968, 0.988] is narrow, indicating stable performance
 \end{itemize}
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=0.8\columnwidth]{figures/figure1_detection_performance.pdf}
 \caption{Automatic sensitive attribute detection performance. All metrics exceed target threshold of 0.85. Error bars represent 95\% confidence intervals.}
+\Description{Bar chart showing detection performance metrics: Precision at 0.969, Recall at 0.995, and F1-Score at 0.978, all exceeding the 0.85 target threshold marked by a dashed line. Error bars show 95\% confidence intervals.}
 \label{fig:detection_performance}
 \end{figure}
 
@@ -261,10 +262,11 @@ Manual Identification & 1.60 & 0.15 \\
     \item \textbf{Reproducibility}: Automated detection ensures consistent application, eliminating inter-annotator variability
 \end{enumerate}
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=0.8\columnwidth]{figures/figure2_performance_comparison.pdf}
 \caption{Execution time comparison between DeepBridge (automatic) and manual identification. 2.91× speedup with statistical significance ($p < 0.001$).}
+\Description{Box plot comparing execution times: DeepBridge automatic detection shows mean time of 0.55 seconds with low variance, while manual identification shows mean time of 1.60 seconds with higher variance, demonstrating a 2.91× speedup.}
 \label{fig:performance_comparison}
 \end{figure}
 
