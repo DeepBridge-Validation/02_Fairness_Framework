@@ -308,22 +308,184 @@ class FairnessDetector:
 
         Returns:
             dict: Compliance results including pass/fail and rates by group
+
+        Example:
+            >>> detector = FairnessDetector()
+            >>> detector.set_sensitive_attributes(['race'])
+            >>> detector.set_target('hired')
+            >>> compliance = detector.check_eeoc_compliance(data)
+            >>> print(f"Compliant: {compliance['compliant']}")
         """
-        # TODO: Implement EEOC compliance checking
-        # This should implement the 80% rule
-        raise NotImplementedError("EEOC compliance checking coming soon")
+        # Use provided data or loaded data
+        if data is not None:
+            df = data
+        elif self._data is not None:
+            df = self._data
+        else:
+            raise ValueError("No data provided. Call load_data() or pass data parameter.")
+
+        # Validate configuration
+        if not self.sensitive_attributes:
+            raise ValueError("No sensitive attributes set. Call set_sensitive_attributes().")
+        if not self.target:
+            raise ValueError("No target set. Call set_target().")
+
+        # Get the first sensitive attribute
+        sensitive_attr = self.sensitive_attributes[0]
+        target = df[self.target].values
+        groups = df[sensitive_attr].values
+
+        # Calculate selection rates by group
+        unique_groups = np.unique(groups)
+        selection_rates = {}
+
+        for group in unique_groups:
+            mask = groups == group
+            rate = np.mean(target[mask])
+            selection_rates[str(group)] = float(rate)
+
+        # Find highest and lowest selection rates
+        max_rate = max(selection_rates.values())
+        min_rate = min(selection_rates.values())
+
+        # Calculate impact ratio (80% rule)
+        if max_rate == 0:
+            impact_ratio = 1.0  # No selection for any group
+        else:
+            impact_ratio = min_rate / max_rate
+
+        # Check compliance (must be >= 0.8)
+        compliant = impact_ratio >= 0.8
+
+        # Find which groups fail
+        failing_groups = []
+        if not compliant:
+            threshold = 0.8 * max_rate
+            for group, rate in selection_rates.items():
+                if rate < threshold:
+                    failing_groups.append(group)
+
+        result = {
+            'compliant': compliant,
+            'impact_ratio': float(impact_ratio),
+            'threshold': 0.8,
+            'selection_rates': selection_rates,
+            'max_rate': float(max_rate),
+            'min_rate': float(min_rate),
+            'failing_groups': failing_groups,
+            'regulation': 'EEOC 80% Rule',
+            'description': 'Selection rate for any group should be at least 80% of the highest rate'
+        }
+
+        if self.verbose:
+            print(f"EEOC Compliance Check:")
+            print(f"  Impact Ratio: {impact_ratio:.3f} (threshold: 0.80)")
+            print(f"  Compliant: {compliant}")
+            if failing_groups:
+                print(f"  Failing Groups: {', '.join(failing_groups)}")
+
+        return result
 
     def check_ecoa_compliance(self, data: Optional[pd.DataFrame] = None) -> Dict[str, Any]:
         """Check ECOA (Equal Credit Opportunity Act) compliance.
+
+        Checks for disparate impact in credit decisions across protected groups.
+        Similar to EEOC but specifically for credit/lending decisions.
 
         Args:
             data: DataFrame to check (uses loaded data if None)
 
         Returns:
-            dict: Compliance results
+            dict: Compliance results including disparate impact analysis
+
+        Example:
+            >>> detector = FairnessDetector()
+            >>> detector.set_sensitive_attributes(['race'])
+            >>> detector.set_target('approved')
+            >>> compliance = detector.check_ecoa_compliance(data)
+            >>> print(f"Compliant: {compliance['compliant']}")
         """
-        # TODO: Implement ECOA compliance checking
-        raise NotImplementedError("ECOA compliance checking coming soon")
+        # Use provided data or loaded data
+        if data is not None:
+            df = data
+        elif self._data is not None:
+            df = self._data
+        else:
+            raise ValueError("No data provided. Call load_data() or pass data parameter.")
+
+        # Validate configuration
+        if not self.sensitive_attributes:
+            raise ValueError("No sensitive attributes set. Call set_sensitive_attributes().")
+        if not self.target:
+            raise ValueError("No target set. Call set_target().")
+
+        # Get the first sensitive attribute
+        sensitive_attr = self.sensitive_attributes[0]
+        target = df[self.target].values
+        groups = df[sensitive_attr].values
+
+        # Calculate approval rates by group
+        unique_groups = np.unique(groups)
+        approval_rates = {}
+
+        for group in unique_groups:
+            mask = groups == group
+            rate = np.mean(target[mask])
+            approval_rates[str(group)] = float(rate)
+
+        # Find highest and lowest approval rates
+        max_rate = max(approval_rates.values())
+        min_rate = min(approval_rates.values())
+
+        # Calculate disparate impact ratio
+        if max_rate == 0:
+            disparate_impact = 1.0
+        else:
+            disparate_impact = min_rate / max_rate
+
+        # ECOA compliance typically uses 80% rule like EEOC
+        # But also considers statistical significance
+        compliant = disparate_impact >= 0.8
+
+        # Calculate rate differences
+        rate_differences = {}
+        max_group = max(approval_rates.items(), key=lambda x: x[1])[0]
+
+        for group, rate in approval_rates.items():
+            if group != max_group:
+                diff = approval_rates[max_group] - rate
+                rate_differences[f"{max_group}_vs_{group}"] = float(diff)
+
+        # Find protected groups with lower rates
+        disadvantaged_groups = []
+        if not compliant:
+            threshold = 0.8 * max_rate
+            for group, rate in approval_rates.items():
+                if rate < threshold:
+                    disadvantaged_groups.append(group)
+
+        result = {
+            'compliant': compliant,
+            'disparate_impact': float(disparate_impact),
+            'threshold': 0.8,
+            'approval_rates': approval_rates,
+            'rate_differences': rate_differences,
+            'max_rate': float(max_rate),
+            'min_rate': float(min_rate),
+            'disadvantaged_groups': disadvantaged_groups,
+            'regulation': 'ECOA (Equal Credit Opportunity Act)',
+            'description': 'Prohibits discrimination in credit decisions based on protected characteristics',
+            'notes': 'Uses disparate impact analysis with 80% rule as guideline'
+        }
+
+        if self.verbose:
+            print(f"ECOA Compliance Check:")
+            print(f"  Disparate Impact: {disparate_impact:.3f} (threshold: 0.80)")
+            print(f"  Compliant: {compliant}")
+            if disadvantaged_groups:
+                print(f"  Disadvantaged Groups: {', '.join(disadvantaged_groups)}")
+
+        return result
 
     def analyze(self, data: Optional[pd.DataFrame] = None) -> BiasDetectionResult:
         """Perform comprehensive fairness analysis.
