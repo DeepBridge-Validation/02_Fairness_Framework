@@ -137,7 +137,7 @@ logs/
 **/data/cifar-*-python/*
 
 # Experiment data directories (uncomment if needed)
-# experimentos/**/data/
+experimentos/data/
 # POR/experiments/**/data/
 # ENG/experiments/**/data/
 
