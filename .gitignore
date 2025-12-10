@@ -219,3 +219,125 @@ credentials/
 .cache/
 tmp/
 temp/
+
+# ============================================================================
+# Testing & Coverage
+# ============================================================================
+
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+*.cover
+.hypothesis/
+.tox/
+
+# ============================================================================
+# Docker
+# ============================================================================
+
+*.dockerignore
+docker-compose.override.yml
+.docker/
+
+# ============================================================================
+# Notebooks
+# ============================================================================
+
+# Jupyter auto-saved notebooks
+.ipynb_checkpoints
+*-checkpoint.ipynb
+
+# Jupyter Notebook metadata
+*.nbconvert.ipynb
+
+# ============================================================================
+# Research & Paper Artifacts
+# ============================================================================
+
+# Paper PDFs (keep compiled versions in git)
+# *.pdf  # Uncomment if you don't want PDFs in git
+
+# Zenodo drafts
+.zenodo-draft/
+
+# ============================================================================
+# Data (specific exclusions)
+# ============================================================================
+
+# Large datasets (keep structure, exclude content)
+data/raw/*.csv
+data/raw/*.parquet
+data/raw/*.json
+data/processed/*.csv
+data/processed/*.parquet
+
+# Synthetic data (too large)
+data/synthetic/batch_*/
+data/synthetic/*.csv
+
+# Results
+results/*.csv
+results/*.json
+results/*.pkl
+experiments/results/*.csv
+experiments/results/*.json
+experiments/results/*.pkl
+
+# Downloaded datasets
+data/downloads/
+data/external/
+
+# ============================================================================
+# ML Model Artifacts
+# ============================================================================
+
+# Scikit-learn
+*.joblib
+
+# MLflow
+mlruns/
+mlartifacts/
+
+# Weights & Biases
+wandb/
+
+# ============================================================================
+# Documentation Build
+# ============================================================================
+
+# Sphinx
+docs/_build/
+docs/_static/
+docs/_templates/
+docs/api/_autosummary/
+
+# MkDocs
+site/
+
+# ============================================================================
+# Package Management
+# ============================================================================
+
+# Poetry
+poetry.lock
+
+# Conda
+*.conda
+*.tar.bz2
+
+# ============================================================================
+# Miscellaneous
+# ============================================================================
+
+# Backup files
+*.bak
+*.backup
+*~.backup
+
+# Lock files (keep requirements.txt, not lock files)
+Pipfile.lock
+poetry.lock
+
+# OS-specific
+.fuse_hidden*

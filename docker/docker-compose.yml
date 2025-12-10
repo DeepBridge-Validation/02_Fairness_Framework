@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  fairness-framework:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: fairness-framework:latest
+    container_name: fairness-framework
+    volumes:
+      # Mount data directory
+      - ../data:/app/data
+      # Mount experiments results
+      - ../experiments/results:/app/experiments/results
+      # Mount notebooks for development
+      - ../experiments/notebooks:/app/experiments/notebooks
+    ports:
+      # Jupyter notebook
+      - "8888:8888"
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token=''
+    # Uncomment below to run in interactive mode instead
+    # stdin_open: true
+    # tty: true
+    # command: /bin/bash
+
+  # Optional: Add a service for running experiments
+  experiments:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: fairness-framework:latest
+    container_name: fairness-experiments
+    volumes:
+      - ../data:/app/data
+      - ../experiments:/app/experiments
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: python experiments/scripts/run_all.py
+    profiles:
+      - experiments  # Only start with: docker-compose --profile experiments up

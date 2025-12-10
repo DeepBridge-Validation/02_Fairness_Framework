@@ -1,0 +1,31 @@
+{
+  "n_datasets": 25,
+  "purpose": "Real manual annotation - NO MOCK",
+  "files": [
+    "synthetic_0359.csv",
+    "synthetic_0071.csv",
+    "synthetic_0372.csv",
+    "synthetic_0153.csv",
+    "synthetic_0102.csv",
+    "synthetic_0392.csv",
+    "synthetic_0375.csv",
+    "synthetic_0122.csv",
+    "synthetic_0066.csv",
+    "synthetic_0448.csv",
+    "synthetic_0007.csv",
+    "synthetic_0192.csv",
+    "synthetic_0404.csv",
+    "synthetic_0082.csv",
+    "synthetic_0369.csv",
+    "synthetic_0386.csv",
+    "synthetic_0493.csv",
+    "synthetic_0028.csv",
+    "synthetic_0314.csv",
+    "synthetic_0406.csv",
+    "synthetic_0488.csv",
+    "synthetic_0489.csv",
+    "synthetic_0278.csv",
+    "synthetic_0354.csv",
+    "synthetic_0074.csv"
+  ]
+}

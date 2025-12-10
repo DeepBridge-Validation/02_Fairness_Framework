@@ -1,0 +1,58 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite both the software and the paper."
+type: software
+title: "Fairness Framework for Machine Learning"
+version: 1.0.0
+date-released: 2025-12-10
+authors:
+  - family-names: "Haase"
+    given-names: "Gustavo"
+    email: "your-email@domain.com"
+    # orcid: "https://orcid.org/0000-0000-0000-0000"  # Uncomment and add your ORCID
+repository-code: "https://github.com/username/fairness-framework"
+url: "https://github.com/username/fairness-framework"
+license: MIT
+keywords:
+  - fairness
+  - machine-learning
+  - bias-detection
+  - algorithmic-fairness
+  - regulatory-compliance
+  - EEOC
+  - ECOA
+  - automated-detection
+  - fairness-metrics
+abstract: >
+  An automated framework for fairness detection and bias mitigation in machine
+  learning systems with regulatory compliance (EEOC/ECOA). The framework provides
+  automated bias detection with 90% F1-Score, 100% precision on regulatory
+  compliance, and 2.9x performance improvement over baseline approaches.
+preferred-citation:
+  type: article
+  title: "Automated Fairness Detection Framework with Regulatory Compliance"
+  authors:
+    - family-names: "Haase"
+      given-names: "Gustavo"
+      # orcid: "https://orcid.org/0000-0000-0000-0000"  # Uncomment and add your ORCID
+  # Update with your publication details:
+  # journal: "Conference/Journal Name"
+  # year: 2025
+  # month: 1
+  # volume: 1
+  # issue: 1
+  # start: 1
+  # end: 17
+  # doi: "10.1234/your-doi"
+  # url: "https://doi.org/10.1234/your-doi"
+  notes: "Paper available in the repository at paper/main/main.pdf"
+references:
+  - type: software
+    title: "Fairlearn"
+    authors:
+      - name: "Fairlearn Contributors"
+    repository-code: "https://github.com/fairlearn/fairlearn"
+  - type: software
+    title: "AI Fairness 360"
+    authors:
+      - name: "IBM Research"
+    repository-code: "https://github.com/Trusted-AI/AIF360"
