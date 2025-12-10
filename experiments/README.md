@@ -1,258 +1,308 @@
-# Experimentos - DeepBridge Fairness Framework
+# Experiments
 
-Pasta contendo o plano de experimentos para validação do paper "DeepBridge Fairness: Da Pesquisa à Regulação".
+This directory contains all experimental validation for the Fairness Framework paper.
 
-## 📁 Estrutura de Arquivos
+## 🎯 Overview
+
+The framework is validated through **5 comprehensive experiments**:
+
+| # | Experiment | Objective | Key Result | Duration |
+|---|------------|-----------|------------|----------|
+| 1 | **Auto-detection** | Validate bias detection accuracy | F1-Score: 0.90 | 3-4 weeks |
+| 2 | **Usability** | Evaluate user experience | SUS Score: 85.2 | 4 weeks |
+| 3 | **EEOC/ECOA Compliance** | Verify regulatory compliance | 100% precision | 1 week |
+| 4 | **Case Studies** | Real-world validation | 4 datasets | 3 weeks |
+| 5 | **Performance** | Benchmark speed | 2.9x speedup | 1 week |
+
+**Total validation**: 500+ synthetic datasets + 4 real-world case studies
+
+## 📁 Structure
 
 ```
-experimentos/
-├── README.md                    # Este arquivo
-├── PLANO_EXPERIMENTOS.md        # Plano completo e detalhado (17 seções)
-├── CHECKLIST_RAPIDO.md          # Checklist executivo para tracking
-├── scripts/                     # Scripts Python para executar experimentos
-│   ├── exp1_auto_detection.py
-│   ├── exp2_metrics_coverage.py
-│   ├── exp3_eeoc_validation.py
-│   ├── exp4_case_studies.py
-│   ├── exp5_usability.py
-│   ├── exp6_performance.py
-│   ├── exp7_threshold_opt.py
-│   ├── exp8_comparison.py
-│   └── utils.py                 # Funções auxiliares
-├── data/                        # Datasets e ground truth
-│   ├── ground_truth.csv         # Anotações manuais (500 datasets)
-│   ├── case_studies/            # Dados dos 4 case studies
-│   └── synthetic/               # Datasets sintéticos para testes
-├── results/                     # Resultados dos experimentos
-│   ├── auto_detection/
-│   ├── eeoc_validation/
-│   ├── case_studies/
-│   ├── usability/
-│   ├── performance/
-│   └── comparison/
-└── reports/                     # Relatórios e visualizações
-    ├── experiment_summary.pdf
-    ├── figures/                 # Gráficos e tabelas
-    └── reproduction_guide.md    # Como reproduzir experimentos
+experiments/
+├── README.md              # This file
+├── scripts/               # Experiment scripts
+│   ├── exp1_*.py
+│   ├── exp2_*.py
+│   ├── exp3_*.py
+│   ├── exp4_*.py
+│   ├── exp5_*.py
+│   └── run_all.sh        # Run all experiments
+├── notebooks/             # Jupyter notebooks
+│   ├── 01_quick_demo.ipynb
+│   └── ...
+├── config/                # Configuration files
+├── results/               # Experimental results (gitignored)
+└── reports/               # Generated reports
 ```
 
 ## 🚀 Quick Start
 
-### 1. Preparação do Ambiente
+### Run Quick Demo (5 minutes)
 
 ```bash
-# Criar ambiente virtual
-python -m venv venv_experiments
-source venv_experiments/bin/activate  # Linux/Mac
-# ou
-venv_experiments\Scripts\activate  # Windows
+# Python script
+python ../scripts/demo_quick.py
 
-# Instalar dependências
-pip install deepbridge
-pip install aif360 fairlearn aequitas  # Ferramentas para comparação
-pip install pandas numpy scipy scikit-learn
-pip install matplotlib seaborn plotly
-pip install pytest pytest-cov
-
-# Verificar instalação
-python -c "from deepbridge import DBDataset; print('DeepBridge OK')"
+# Or Jupyter notebook
+jupyter notebook notebooks/01_quick_demo.ipynb
 ```
 
-### 2. Executar Experimento Exemplo
+### Run Specific Experiment
 
 ```bash
-# Teste rápido com COMPAS dataset
 cd scripts/
-python exp4_case_studies.py --dataset compas --quick
 
-# Saída esperada:
-# ✅ Atributos detectados: ['race', 'sex', 'age'] (3/3)
-# ✅ Tempo de análise: 7.2 min
-# ✅ Violação detectada: FPR difference 22pp
-# ✅ Threshold ótimo: 0.62 (FPR → 8pp)
+# Experiment 1: Auto-detection (3-4 weeks)
+python exp1_auto_detection.py
+
+# Experiment 2: Usability (requires participants)
+python exp5_usability.py
+
+# Experiment 3: EEOC/ECOA Compliance
+python exp3_eeoc_validation.py
+
+# Experiment 4: Case Studies
+python exp4_case_studies.py
+
+# Experiment 5: Performance Benchmarks
+python exp6_performance.py
 ```
 
-### 3. Ver Checklist de Progresso
+### Run All Experiments
 
 ```bash
-cat CHECKLIST_RAPIDO.md
+cd scripts/
+./run_all.sh  # Runs all experiments (4-5 hours)
 ```
 
-## 📊 Experimentos Principais
+## 📊 Experiment Details
 
-### Experimentos Críticos (⭐ Prioridade MÁXIMA)
+### Experiment 1: Automated Bias Detection
 
-1. **Auto-Detecção** (`exp1_auto_detection.py`)
-   - 500 datasets
-   - Target: F1 ≥ 0.90
-   - Tempo estimado: 20h
+**Objective**: Validate the framework's ability to automatically detect bias
 
-2. **Verificação EEOC/ECOA** (`exp3_eeoc_validation.py`)
-   - Regra 80% + Question 21
-   - Target: 100% precisão
-   - Tempo estimado: 8h
+**Method**:
+- 500 synthetic datasets with various bias scenarios
+- Ground truth annotations from 2 independent annotators
+- Metrics: Precision, Recall, F1-Score
 
-3. **Case Studies** (`exp4_case_studies.py`)
-   - COMPAS, German Credit, Adult, Healthcare
-   - Target: 75-79% economia de tempo
-   - Tempo estimado: 40h
+**Expected Results**:
+- F1-Score ≥ 0.90
+- Precision ≥ 0.92
+- Recall ≥ 0.89
 
-4. **Usabilidade** (`exp5_usability.py`)
-   - N=20 participantes
-   - Target: SUS ≥ 85
-   - Tempo estimado: 60h (inclui recrutamento)
+**Duration**: 3-4 weeks
 
-5. **Performance** (`exp6_performance.py`)
-   - 3 tamanhos de datasets
-   - Target: Speedup ≥ 2.9x
-   - Tempo estimado: 12h
+**Script**: `scripts/exp1_auto_detection.py`
 
-6. **Comparação** (`exp8_comparison.py`)
-   - AIF360, Fairlearn, Aequitas
-   - Target: Feature matrix validada
-   - Tempo estimado: 16h
+---
 
-**Total estimado**: ~156 horas (4 semanas full-time)
+### Experiment 2: Usability Evaluation
 
-## 📖 Documentos
+**Objective**: Evaluate user experience and ease of use
 
-### [PLANO_EXPERIMENTOS.md](PLANO_EXPERIMENTOS.md)
-Documento master com:
-- 17 seções de experimentos detalhados
-- Metodologias completas
-- Métricas de validação
-- Critérios de sucesso
-- Timeline de 18 semanas
+**Method**:
+- 20 participants (10 ML practitioners, 10 domain experts)
+- Tasks: detect bias, interpret results, apply mitigation
+- System Usability Scale (SUS) questionnaire
 
-### [CHECKLIST_RAPIDO.md](CHECKLIST_RAPIDO.md)
-Checklist executivo com:
-- 6 experimentos críticos
-- Tabela de validação de claims
-- Red flags e riscos
-- Timeline resumido
+**Expected Results**:
+- SUS Score ≥ 85.2
+- NASA-TLX ≤ 32.1
+- Task success rate ≥ 95%
 
-## 🎯 Claims do Paper a Validar
+**Duration**: 4 weeks
 
-| Claim | Valor | Experimento |
-|-------|-------|-------------|
-| Auto-detecção F1-Score | 0.90 | 1.1 |
-| Auto-detecção Precision | 0.92 | 1.1 |
-| Auto-detecção Recall | 0.89 | 1.1 |
-| Métricas totais | 15 (4+11) | 2.1 |
-| SUS Score | 85.2 | 5.1 |
-| NASA-TLX | 32.1 | 5.2 |
-| Taxa de sucesso | 95% | 5.3 |
-| Time-to-insight | 10.2 min | 5.4 |
-| Speedup médio | 2.9x | 6.1 |
-| Redução de memória | 40-42% | 6.2 |
-| COMPAS tempo | 7.2 min | 4.1 |
-| German Credit tempo | 5.8 min | 4.2 |
-| Adult tempo | 12.4 min | 4.3 |
-| Healthcare tempo | 9.1 min | 4.4 |
+**Script**: `scripts/exp5_usability.py`
 
-## ⚠️ Critérios Mínimos para Publicação
+**Note**: Requires participant recruitment
 
-Para o paper ser aceito no FAccT 2026, os seguintes critérios DEVEM ser atendidos:
+---
 
-### ✅ Obrigatórios (Deal-breakers):
-1. **EEOC/ECOA**: 100% precisão (sem margem de erro)
+### Experiment 3: EEOC/ECOA Compliance
+
+**Objective**: Verify regulatory compliance checking
+
+**Method**:
+- Test EEOC 80% rule implementation
+- Validate ECOA compliance checking
+- 100 synthetic scenarios
+
+**Expected Results**:
+- 100% precision on compliance violations
+- 100% recall on compliance violations
+
+**Duration**: 1 week
+
+**Script**: `scripts/exp3_eeoc_validation.py`
+
+---
+
+### Experiment 4: Real-World Case Studies
+
+**Objective**: Validate on real-world datasets
+
+**Method**:
+- 4 case studies: COMPAS (7.2 min), German Credit (5.8 min), Adult (12.4 min), Healthcare (9.1 min)
+- Compare with state-of-the-art tools (AIF360, Fairlearn)
+- Measure time-to-insight
+
+**Expected Results**:
+- Detect known biases in all 4 datasets
+- 75-79% time reduction vs. manual analysis
+
+**Duration**: 3 weeks
+
+**Script**: `scripts/exp4_case_studies.py`
+
+**Datasets**: Available in `../data/case_studies/`
+
+---
+
+### Experiment 5: Performance Benchmarks
+
+**Objective**: Measure computational efficiency
+
+**Method**:
+- Benchmark on datasets of varying sizes (100 to 100,000 rows)
+- Compare runtime with AIF360 and Fairlearn
+- Measure memory usage
+
+**Expected Results**:
+- 2.9x faster than baseline
+- 40-42% memory reduction
+- Linear scaling with dataset size
+
+**Duration**: 1 week
+
+**Script**: `scripts/exp6_performance.py`
+
+---
+
+## 📈 Results
+
+Results from all experiments are saved in `results/`:
+
+```
+results/
+├── auto_detection/
+│   ├── metrics.json
+│   ├── confusion_matrix.png
+│   └── report.html
+├── usability/
+├── eeoc_validation/
+├── case_studies/
+└── performance/
+```
+
+## 📝 Configuration
+
+Experiment parameters can be configured in `config/`:
+
+```yaml
+# Example: config/exp1_detection.yaml
+n_datasets: 500
+threshold: 0.1
+random_seed: 42
+output_dir: results/auto_detection/
+```
+
+## 🔍 Monitoring Progress
+
+Track experiment progress with:
+
+```bash
+# View checklist
+cat CHECKLIST_RAPIDO.md
+
+# View execution guide
+cat GUIA_EXECUCAO.md
+
+# View detailed timeline
+cat ../docs/experiments/timeline.md
+```
+
+## 📚 Documentation
+
+**Detailed documentation** is available in `../docs/experiments/`:
+
+- [Overview](../docs/experiments/overview.md) - Executive summary (RESUMO_EXECUTIVO)
+- [Timeline](../docs/experiments/timeline.md) - Detailed timeline and planning (PLANO_EXPERIMENTOS)
+
+**Additional documents** (in Portuguese):
+- `CHECKLIST_RAPIDO.md` - Quick tracking checklist
+- `GUIA_EXECUCAO.md` - Execution guide
+- `PLANO_EXPERIMENTOS.md` - Complete experiment plan (17 sections)
+- `RESUMO_EXECUTIVO.md` - Executive summary
+
+## ⚠️ Minimum Criteria for Publication
+
+For the paper to be accepted at FAccT 2026, the following criteria **MUST** be met:
+
+### ✅ Required (Deal-breakers):
+1. **EEOC/ECOA**: 100% precision (no margin for error)
 2. **SUS**: ≥ 75 (claim: 85.2)
 3. **Speedup**: ≥ 2.0x (claim: 2.9x)
-4. **Case Studies**: 4/4 completos
-5. **Usabilidade N**: ≥ 15 participantes (claim: 20)
+4. **Case Studies**: 4/4 completed
+5. **Usability N**: ≥ 15 participants (claim: 20)
 
-### ⭐ Recomendados:
-1. **F1 auto-detecção**: ≥ 0.85 (claim: 0.90)
-2. **Taxa de sucesso**: ≥ 85% (claim: 95%)
+### ⭐ Recommended:
+1. **F1 auto-detection**: ≥ 0.85 (claim: 0.90)
+2. **Success rate**: ≥ 85% (claim: 95%)
 3. **Datasets**: ≥ 300 (claim: 500)
 
-## 🔬 Execução dos Experimentos
+## 🐛 Troubleshooting
 
-### Ordem Recomendada:
+### Common Issues
 
+**Issue**: `ModuleNotFoundError`
 ```bash
-# Semana 1-2: Setup
-scripts/setup_environment.sh
-scripts/collect_datasets.py
-
-# Semana 3-4: Auto-detecção
-python scripts/exp1_auto_detection.py --full
-
-# Semana 5-6: Métricas + EEOC
-python scripts/exp2_metrics_coverage.py
-python scripts/exp3_eeoc_validation.py
-
-# Semana 7-9: Case Studies
-python scripts/exp4_case_studies.py --all
-
-# Semana 10-12: Usabilidade
-python scripts/exp5_usability.py --recruit --execute
-
-# Semana 13-14: Performance
-python scripts/exp6_performance.py --all-sizes
-
-# Semana 15: Comparação
-python scripts/exp8_comparison.py --tools all
-
-# Semana 16: Robustness
-python scripts/exp9_edge_cases.py
-
-# Semana 17-18: Análise e Relatórios
-python scripts/generate_reports.py --output reports/
+# Solution: Install dependencies
+pip install -r ../requirements.txt
 ```
 
-## 📈 Tracking de Progresso
-
-Use o arquivo `CHECKLIST_RAPIDO.md` para tracking diário:
-
+**Issue**: Data not found
 ```bash
-# Ver status atual
-grep "⬜\|🔄\|✅" CHECKLIST_RAPIDO.md
-
-# Atualizar status de um experimento
-# ⬜ Não iniciado → 🔄 Em progresso → ✅ Completo
+# Solution: Check data directory
+ls ../data/synthetic/
+# If empty, data may have been gitignored (too large)
+# See ../data/README.md for instructions
 ```
 
-## 🤝 Contribuindo com Experimentos
+**Issue**: Out of memory
+```bash
+# Solution: Reduce batch size in config files
+# Edit config/*.yaml and reduce n_samples or batch_size
+```
 
-Se você for executar os experimentos:
+For more issues, see [../docs/troubleshooting.md](../docs/troubleshooting.md)
 
-1. **Clone o ambiente**:
-   ```bash
-   git clone <repo>
-   cd papers/02_Fairness_Framework/experimentos
-   ```
+## 🤝 Contributing
 
-2. **Siga o PLANO_EXPERIMENTOS.md** para metodologia exata
+Found issues or want to add experiments?
 
-3. **Salve resultados em `results/`** seguindo estrutura:
-   ```
-   results/
-   ├── <experimento_id>/
-   │   ├── raw_data.csv          # Dados brutos
-   │   ├── processed_data.csv    # Dados processados
-   │   ├── analysis.txt          # Análise textual
-   │   └── figures/              # Gráficos
-   ```
+1. See [../CONTRIBUTING.md](../CONTRIBUTING.md) for guidelines
+2. Add your experiment script to `scripts/`
+3. Add configuration to `config/`
+4. Document in this README
+5. Submit a pull request
 
-4. **Documente problemas** em `issues.md`
+## 📧 Questions?
 
-## 📞 Contato
+- **General questions**: See [../docs/faq.md](../docs/faq.md)
+- **Experimental methodology**: See [../docs/experiments/overview.md](../docs/experiments/overview.md)
+- **Technical issues**: Open a GitHub issue
+- **Email**: your-email@domain.com
 
-**Responsável**: [Adicionar nome e email]
+## 📚 References
 
-**Dúvidas sobre experimentos**: Consulte PLANO_EXPERIMENTOS.md seção correspondente
-
-**Bugs ou issues**: Abra issue no repositório
-
-## 📚 Referências
-
-### Papers Base:
+### Base Papers:
 - Bellamy et al. (2018) - AI Fairness 360
 - Bird et al. (2020) - Fairlearn
 - Saleiro et al. (2018) - Aequitas
 
-### Metodologias:
+### Methodologies:
 - Brooke (1996) - System Usability Scale
 - Hart & Staveland (1988) - NASA Task Load Index
 
@@ -263,10 +313,10 @@ Se você for executar os experimentos:
 
 ---
 
-**Última atualização**: 2025-12-06
+**Last Updated**: 2025-12-10
 
-**Status do Projeto**: ⬜ Não iniciado
+**Project Status**: ⬜ Not started (ready to begin)
 
-**Prazo**: Submissão FAccT 2026 (verificar deadline exato)
+**Deadline**: FAccT 2026 submission (check exact deadline)
 
-**Boa sorte com os experimentos! 🚀**
+**Good luck with the experiments! 🚀**

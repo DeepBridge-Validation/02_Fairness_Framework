@@ -20,12 +20,46 @@ __version__ = "1.0.0"
 __author__ = "Gustavo Haase"
 __license__ = "MIT"
 
-# Core imports (to be implemented)
-# from .fairness_detector import FairnessDetector
-# from .metrics import *
-# from .visualization import plot_fairness_report
+# Core imports
+from .fairness_detector import FairnessDetector, BiasDetectionResult
+from .metrics import (
+    demographic_parity_difference,
+    equalized_odds_difference,
+    equal_opportunity_difference,
+    disparate_impact_ratio,
+    compute_all_metrics,
+    is_fair,
+)
+from .visualization import (
+    plot_fairness_report,
+    plot_metric_comparison,
+    plot_group_comparison,
+    create_fairness_dashboard,
+)
+from .utils import (
+    load_dataset,
+    save_results,
+    group_statistics,
+)
 
 __all__ = [
-    # "FairnessDetector",
-    # Add other public API elements here
+    # Main classes
+    "FairnessDetector",
+    "BiasDetectionResult",
+    # Metrics
+    "demographic_parity_difference",
+    "equalized_odds_difference",
+    "equal_opportunity_difference",
+    "disparate_impact_ratio",
+    "compute_all_metrics",
+    "is_fair",
+    # Visualization
+    "plot_fairness_report",
+    "plot_metric_comparison",
+    "plot_group_comparison",
+    "create_fairness_dashboard",
+    # Utils
+    "load_dataset",
+    "save_results",
+    "group_statistics",
 ]
