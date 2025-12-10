@@ -1,27 +1,40 @@
 # Quick Start Guide
 
-Get started with the Fairness Framework in 15 minutes.
+Get started with DeepBridge experimental validation in 15 minutes.
 
 ## ⚡ Prerequisites
 
 - Python 3.8 or higher
 - pip or conda
 - Git (for cloning repository)
+- DeepBridge library (from `/home/guhaase/projetos/DeepBridge/deepbridge`)
 
 ## 📥 Installation
 
-### Option 1: pip (Recommended)
+### Step 1: Install DeepBridge
 
 ```bash
-# Clone repository
-git clone https://github.com/username/fairness-framework.git
-cd fairness-framework
+# Navigate to DeepBridge source
+cd /home/guhaase/projetos/DeepBridge/deepbridge
 
-# Create virtual environment
+# Install in development mode
+pip install -e .
+
+# Or install normally
+pip install .
+```
+
+### Step 2: Install Experiment Dependencies
+
+```bash
+# Navigate to this repository
+cd /home/guhaase/projetos/DeepBridge/papers/02_Fairness_Framework
+
+# Create virtual environment (optional)
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-# Install dependencies
+# Install experiment dependencies
 pip install -r requirements.txt
 ```
 
@@ -51,10 +64,10 @@ docker run -it fairness-framework
 
 ## 🎯 First Example (5 minutes)
 
-### 1. Import the Framework
+### 1. Import DeepBridge
 
 ```python
-from src.fairness_detector import FairnessDetector
+from deepbridge import DBDataset
 import pandas as pd
 ```
 
@@ -66,39 +79,37 @@ df = pd.read_csv("data/case_studies/adult/adult.csv")
 
 # Or create a simple example
 data = {
-    'feature_1': [0.1, 0.5, 0.3, 0.8, 0.2],
-    'feature_2': [0.9, 0.4, 0.6, 0.2, 0.7],
-    'sensitive_attr': ['A', 'B', 'A', 'B', 'A'],
-    'target': [1, 0, 1, 0, 1]
+    'age': [25, 45, 35, 50, 28],
+    'income': [50000, 80000, 60000, 95000, 45000],
+    'gender': ['M', 'F', 'M', 'F', 'M'],
+    'race': ['White', 'Black', 'Asian', 'White', 'Hispanic'],
+    'approved': [1, 0, 1, 1, 0]
 }
 df = pd.DataFrame(data)
 ```
 
-### 3. Detect Bias
+### 3. Create DBDataset (Auto-detects Sensitive Attributes)
 
 ```python
-# Initialize detector
-detector = FairnessDetector()
+# Create dataset - DeepBridge automatically detects sensitive attributes
+dataset = DBDataset(
+    data=df,
+    target_column='approved'
+)
 
-# Configure
-detector.set_sensitive_attributes(['sensitive_attr'])
-detector.set_target('target')
-
-# Detect bias
-results = detector.detect_bias(df)
-
-# Print results
-print(results.summary())
+# Check what was detected
+print(f"Detected sensitive attributes: {dataset.detected_sensitive_attributes}")
+print(f"Target column: {dataset.target_column}")
 ```
 
-### 4. Visualize Results
+### 4. Analyze Fairness
 
 ```python
-# Generate fairness report
-results.plot()
+# Run fairness analysis
+results = dataset.analyze_fairness()
 
-# Save report
-results.save_report("fairness_report.html")
+# Print results
+print(results)
 ```
 
 ## 📊 Run Demo Notebook
@@ -195,7 +206,7 @@ Now that you have the basics:
 
 1. **Learn the API**: See [API Reference](api/index.md)
 2. **Explore Experiments**: Check [experiments/](experiments/overview.md)
-3. **Read the Paper**: See [paper/main/main.pdf](../paper/main/main.pdf)
+3. **Read the Paper**: See [paper/english/main.pdf](../paper/english/main.pdf)
 4. **Try Case Studies**: Explore [data/case_studies/](../data/case_studies/)
 
 ## 🐛 Troubleshooting
@@ -254,7 +265,7 @@ For more issues, see [Troubleshooting Guide](troubleshooting.md).
 
 - **Issues**: [GitHub Issues](https://github.com/username/fairness-framework/issues)
 - **Email**: your-email@domain.com
-- **Paper**: See `paper/main/main.pdf` for theoretical background
+- **Paper**: See `paper/english/main.pdf` for theoretical background
 
 ---
 

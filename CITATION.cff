@@ -6,9 +6,15 @@ version: 1.0.0
 date-released: 2025-12-10
 authors:
   - family-names: "Haase"
-    given-names: "Gustavo"
-    email: "your-email@domain.com"
-    # orcid: "https://orcid.org/0000-0000-0000-0000"  # Uncomment and add your ORCID
+    given-names: "Gustavo Coelho"
+    email: "gustavohaase@gmail.com"
+    affiliation: "Banco do Brasil S.A"
+    orcid: "https://orcid.org/0000-0000-0000-0000"
+  - family-names: "Silva"
+    given-names: "Paulo Henrique Dourado da"
+    email: "paulodourado.unb@gmail.com"
+    affiliation: "Banco do Brasil S.A"
+    orcid: "https://orcid.org/0000-0000-0000-0000"
 repository-code: "https://github.com/username/fairness-framework"
 url: "https://github.com/username/fairness-framework"
 license: MIT
@@ -32,8 +38,13 @@ preferred-citation:
   title: "Automated Fairness Detection Framework with Regulatory Compliance"
   authors:
     - family-names: "Haase"
-      given-names: "Gustavo"
-      # orcid: "https://orcid.org/0000-0000-0000-0000"  # Uncomment and add your ORCID
+      given-names: "Gustavo Coelho"
+      email: "gustavohaase@gmail.com"
+      affiliation: "Banco do Brasil S.A"
+    - family-names: "Silva"
+      given-names: "Paulo Henrique Dourado da"
+      email: "paulodourado.unb@gmail.com"
+      affiliation: "Banco do Brasil S.A"
   # Update with your publication details:
   # journal: "Conference/Journal Name"
   # year: 2025

@@ -1,6 +1,6 @@
 # Fairness Framework for Machine Learning
 
-[![Paper](https://img.shields.io/badge/Paper-PDF-red)](paper/main/main.pdf)
+[![Paper](https://img.shields.io/badge/Paper-PDF-red)](paper/english/main.pdf)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
@@ -43,24 +43,26 @@ pip install -r requirements.txt
 ### Basic Usage
 
 ```python
-from src.fairness_detector import FairnessDetector
-
-# Initialize detector
-detector = FairnessDetector()
+from deepbridge import DBDataset
+import pandas as pd
 
 # Load your dataset
-detector.load_data("data/case_studies/adult/adult.csv",
-                   target="income",
-                   sensitive_attrs=["race", "sex"])
+df = pd.read_csv("data/case_studies/adult/adult.csv")
 
-# Detect bias
-results = detector.detect_bias()
+# Create DBDataset (auto-detects sensitive attributes)
+dataset = DBDataset(
+    data=df,
+    target_column="income"
+)
+
+# Check detected sensitive attributes
+print(f"Detected attributes: {dataset.detected_sensitive_attributes}")
+
+# Run fairness analysis
+results = dataset.analyze_fairness()
 
 # Print report
-print(results.summary())
-
-# Visualize results
-results.plot()
+print(results)
 ```
 
 ### Run Demo
@@ -112,12 +114,8 @@ fairness-framework/
 │   ├── main/                  # Main English version
 │   ├── facct2026/             # FAccT 2026 submission
 │   └── portuguese/            # Portuguese version
-├── src/                       # Framework source code
-│   ├── fairness_detector.py   # Main detector class
-│   ├── metrics.py             # Fairness metrics
-│   └── visualization.py       # Plotting utilities
 ├── experiments/               # Experimental validation
-│   ├── scripts/               # Experiment scripts
+│   ├── scripts/               # Experiment scripts (uses DeepBridge)
 │   ├── notebooks/             # Jupyter notebooks
 │   └── results/               # Experimental results
 ├── data/                      # Datasets
@@ -128,7 +126,7 @@ fairness-framework/
 │   ├── quickstart.md          # 15-minute tutorial
 │   ├── experiments/           # Experiment details
 │   └── api/                   # API reference
-├── tests/                     # Unit tests
+├── scripts/                   # Utility scripts
 └── docker/                    # Docker configuration
 ```
 
@@ -164,18 +162,25 @@ docker run -it -v $(pwd)/data:/app/data fairness-framework
 
 See [requirements.txt](requirements.txt) for complete list.
 
-## 🧪 Testing
+## 🧪 Experimental Validation
+
+This repository contains experimental validation of the DeepBridge framework.
 
 ```bash
-# Run all tests
-pytest tests/
+# Run all experiments
+cd experiments/scripts
+./run_all.sh
 
-# Run with coverage
-pytest --cov=src tests/
+# Run specific experiment
+python exp1_auto_detection.py --n-datasets 500
+python exp3_eeoc_validation.py
+python exp4_case_studies.py
 
-# Run specific test
-pytest tests/test_fairness_detector.py
+# Interactive notebooks
+jupyter notebook experiments/notebooks/
 ```
+
+For DeepBridge unit tests, see the main DeepBridge repository at `/home/guhaase/projetos/DeepBridge/deepbridge`
 
 ## 📄 Citation
 

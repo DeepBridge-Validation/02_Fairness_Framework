@@ -73,7 +73,7 @@ We welcome documentation improvements! See [CONTRIBUTING.md](../CONTRIBUTING.md)
 
 ## 🔗 External Resources
 
-- [Paper](../paper/main/main.pdf): Research paper (17 pages)
+- [Paper](../paper/english/main.pdf): Research paper (17 pages)
 - [GitHub Repository](https://github.com/username/fairness-framework)
 - [Issue Tracker](https://github.com/username/fairness-framework/issues)
 
