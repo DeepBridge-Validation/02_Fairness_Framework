@@ -89,6 +89,7 @@ First framework that automatically verifies regulatory compliance:
     \item \textbf{ECOA Adverse Actions}: Generates notices explaining adverse decisions with specific reasons
 \end{itemize}
 
+\begin{figure}[!htbp]
 \begin{lstlisting}[language=Python, caption=Automatic EEOC/ECOA verification]
 from deepbridge import FairnessTestManager
 
@@ -100,6 +101,7 @@ print(compliance['eeoc_80_rule'])  # True/False
 print(compliance['eeoc_question_21'])  # True/False
 print(compliance['violations'])  # List of violations
 \end{lstlisting}
+\end{figure}
 
 \textbf{4. Threshold Optimization for Fairness-Accuracy Trade-offs}
 

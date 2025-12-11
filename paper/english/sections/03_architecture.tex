@@ -21,6 +21,7 @@ The DeepBridge Fairness architecture (Figure~\ref{fig:fairness_architecture}) fo
     \label{fig:fairness_architecture}
 \end{figure}
 
+\begin{figure}[!htbp]
 \begin{lstlisting}[language=Python, caption=Complete DeepBridge Fairness workflow]
 from deepbridge import DBDataset, FairnessTestManager
 
@@ -44,6 +45,7 @@ optimal_threshold = ftm.optimize_threshold(
     min_accuracy=0.80
 )
 \end{lstlisting}
+\end{figure}
 
 \subsection{Auto-Detection of Sensitive Attributes}
 
@@ -191,6 +193,7 @@ Measures heterogeneity of predictions within groups.
 
 Automatically verifies if $\text{DI} \geq 0.80$:
 
+\begin{figure}[!htbp]
 \begin{lstlisting}[language=Python, caption=Automatic 80\% rule verification]
 def check_80_rule(y_pred, sensitive_attr):
     groups = sensitive_attr.unique()
@@ -218,6 +221,7 @@ def check_80_rule(y_pred, sensitive_attr):
         'violations': violations
     }
 \end{lstlisting}
+\end{figure}
 
 \textbf{Generated Report}:
 \begin{verbatim}
@@ -231,6 +235,7 @@ Recommendation: Adjust threshold or retrain model
 
 EEOC Question 21 stipulates that groups with <2\% representation lack statistical validity:
 
+\begin{figure}[!htbp]
 \begin{lstlisting}[language=Python, caption=Question 21 verification]
 def check_question_21(sensitive_attr, min_representation=0.02):
     total = len(sensitive_attr)
@@ -253,6 +258,7 @@ def check_question_21(sensitive_attr, min_representation=0.02):
         'warnings': warnings
     }
 \end{lstlisting}
+\end{figure}
 
 \textbf{Automatic Action}: Groups with <2\% are excluded from disparate impact analysis, avoiding false positives.
 
@@ -262,6 +268,7 @@ def check_question_21(sensitive_attr, min_representation=0.02):
 
 DeepBridge analyzes threshold range (10-90\%) and computes fairness and accuracy metrics for each threshold:
 
+\begin{figure}[!htbp]
 \begin{lstlisting}[language=Python, caption=Multi-objective threshold optimization]
 from deepbridge import FairnessTestManager
 
@@ -284,6 +291,7 @@ optimal = ftm.recommend_threshold(
     objective='maximize_f1'
 )
 \end{lstlisting}
+\end{figure}
 
 \subsubsection{Pareto Frontier}
 
