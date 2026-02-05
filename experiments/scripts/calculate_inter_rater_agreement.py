@@ -9,9 +9,10 @@ Uso:
 """
 
 import argparse
-import pandas as pd
-import numpy as np
 from pathlib import Path
+
+import numpy as np
+import pandas as pd
 from sklearn.metrics import cohen_kappa_score, confusion_matrix
 
 

@@ -11,12 +11,13 @@ Uso:
     python 02_annotate_ground_truth.py --calculate-agreement
 """
 
-import pandas as pd
-import numpy as np
-from pathlib import Path
-from typing import List, Set, Dict
-import json
 import argparse
+import json
+from pathlib import Path
+from typing import Dict, List, Set
+
+import numpy as np
+import pandas as pd
 from sklearn.metrics import cohen_kappa_score
 
 

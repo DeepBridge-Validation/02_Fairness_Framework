@@ -9,12 +9,13 @@ Uso:
     python 03_generate_mock_ground_truth.py --n-datasets 500
 """
 
-import pandas as pd
-import numpy as np
-from pathlib import Path
-import json
 import argparse
+import json
 from difflib import SequenceMatcher
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
 
 
 class MockGroundTruthGenerator:

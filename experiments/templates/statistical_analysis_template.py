@@ -10,13 +10,14 @@ Inclui:
 - Correção para múltiplas comparações (Bonferroni, Holm)
 """
 
-import pandas as pd
+from typing import Dict, Tuple
+
 import numpy as np
+import pandas as pd
+import pingouin as pg
 from scipy import stats
 from statsmodels.stats.power import TTestIndPower, TTestPower
 from statsmodels.stats.proportion import proportion_confint
-import pingouin as pg
-from typing import Tuple, Dict
 
 
 class StatisticalAnalysis:

@@ -6,8 +6,8 @@ Uso:
     python generate_executive_report.py
 """
 
-import json
 import datetime
+import json
 from pathlib import Path
 
 

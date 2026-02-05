@@ -20,17 +20,19 @@ Uso:
 """
 
 import argparse
+import json
 import time
-import pandas as pd
-import numpy as np
 from pathlib import Path
 from typing import Dict
-import json
+
+import numpy as np
+import pandas as pd
 
 try:
-    from deepbridge import DBDataset, FairnessTestManager
     from sklearn.ensemble import RandomForestClassifier
     from sklearn.model_selection import train_test_split
+
+    from deepbridge import DBDataset, FairnessTestManager
 except ImportError as e:
     print(f"⚠️  Erro de importação: {e}")
     print("Instale: pip install deepbridge scikit-learn")

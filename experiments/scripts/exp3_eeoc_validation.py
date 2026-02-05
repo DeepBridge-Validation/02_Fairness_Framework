@@ -13,11 +13,12 @@ Uso:
 """
 
 import argparse
-import pandas as pd
-import numpy as np
+import json
 from pathlib import Path
 from typing import Dict, List, Tuple
-import json
+
+import numpy as np
+import pandas as pd
 
 try:
     from deepbridge import DBDataset, FairnessTestManager

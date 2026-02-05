@@ -40,8 +40,8 @@ def test_deepbridge():
     # Test 2: Create sample data
     print("\nTest 2: Creating sample dataset...")
     try:
-        import pandas as pd
         import numpy as np
+        import pandas as pd
 
         np.random.seed(42)
         n_samples = 100

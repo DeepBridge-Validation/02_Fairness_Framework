@@ -14,11 +14,12 @@ Uso:
 
 import argparse
 import time
-import pandas as pd
-import numpy as np
 from pathlib import Path
 from typing import Dict, List, Set, Tuple
-from sklearn.metrics import precision_score, recall_score, f1_score
+
+import numpy as np
+import pandas as pd
+from sklearn.metrics import f1_score, precision_score, recall_score
 
 # Importar DeepBridge
 try:

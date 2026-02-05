@@ -9,11 +9,12 @@ Uso:
     python 04_create_annotation_batches.py --batch-size 50 --n-batches 10
 """
 
-import pandas as pd
-import numpy as np
-from pathlib import Path
-import json
 import argparse
+import json
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
 
 
 def create_stratified_batches(datasets_dir: Path, metadata_file: Path,

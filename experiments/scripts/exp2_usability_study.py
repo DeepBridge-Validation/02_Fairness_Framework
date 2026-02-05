@@ -27,14 +27,15 @@ Uso:
     python exp2_usability_study.py --report --input ../results/exp2_usability
 """
 
-import pandas as pd
-import numpy as np
+import argparse
+import json
+from datetime import datetime
 from pathlib import Path
 from typing import Dict, List
-import json
-import argparse
-from datetime import datetime
+
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import seaborn as sns
 from scipy import stats
 
